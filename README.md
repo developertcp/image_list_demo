@@ -4,7 +4,7 @@ A new Flutter project. Image List Demo
 
 ## Getting Started
 
-This project is a starting point for a Flutter application and running with GitHub..
+This project is a starting point for a Flutter application and running with GitHub...
 
 A few resources to get you started if this is your first Flutter project:
 
