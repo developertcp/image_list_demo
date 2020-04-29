@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -54,7 +57,25 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter = _counter + 2;
+      futureDog = fetchDog();
+      futureDogs = fetchDogs(count: _counter);
     });
+  }
+
+  // Future<Album> futureAlbum;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   futureAlbum = fetchAlbum();
+  // }
+
+  Future<Dog> futureDog;
+  Future<List<Dog>> futureDogs;
+  @override
+  void initState() {
+    super.initState();
+    futureDog = fetchDog();
+    futureDogs = fetchDogs();
   }
 
   @override
@@ -91,6 +112,45 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            FutureBuilder(
+              future: futureDog,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data.filename);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
+              },
+            ),
+            FutureBuilder(
+              future: futureDogs,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              leading: CircleAvatar(backgroundColor: Colors.blueAccent,
+                              backgroundImage: NetworkImage(snapshot.data[index].filename),),
+
+                              title: Text(snapshot.data[index].breed),
+                              subtitle: Text(snapshot.data[index].filename),
+                              trailing: Icon(Icons.edit),
+                            ),
+                          );
+                        }),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
+              },
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
@@ -107,84 +167,96 @@ class _MyHomePageState extends State<MyHomePage> {
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
                     subtitle: Text("coolest haircut in town"),
                     trailing: Icon(Icons.edit),
                   ),
-                ),Card(
+                ),
+                Card(
                   child: ListTile(
                     leading: Image.asset('assets/images/001-man-13.png'),
                     title: Text("Joe Manrow (m30)."),
@@ -212,4 +284,96 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+// Future<http.Response> fetchAlbum() {
+//   return http.get('https://jsonplaceholder.typicode.com/albums/1');
+// }
+
+Future<Album> fetchAlbum() async {
+  final response =
+      await http.get('https://jsonplaceholder.typicode.com/albums/1');
+
+  if (response.statusCode == 200) {
+    print('successful API return');
+    Album album = Album.fromJson(json.decode(response.body));
+    print(album.title + ' -- ');
+    // If the server did return a 200 OK response, then parse the JSON.
+    return album;
+  } else {
+    // If the server did not return a 200 OK response, then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  Album({this.userId, this.id, this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
+
+Future<Dog> fetchDog() async {
+  final response =
+      await http.get('https://dog.ceo/api/breeds/image/random/300');
+
+  if (response.statusCode == 200) {
+    print('successful API return');
+    // Album album = Album.fromJson(json.decode(response.body));
+    // print(album.title + ' -- ');
+    // If the server did return a 200 OK response, then parse the JSON.
+    // return album;
+    final body = json.decode(response.body);
+    final path = body['message'][0];
+    RegExp lastFolder = RegExp(r'.*\/([^\/]+)\/'); // regex to match
+    final folder = lastFolder.firstMatch(path)[1]; // 1 is first match
+    print(json.decode(response.body)['message'][0]);
+    print(folder);
+    Dog dog = Dog('this breed', folder);
+    return dog;
+  } else {
+    // If the server did not return a 200 OK response, then throw an exception.
+    throw Exception('Failed to load dog');
+  }
+}
+
+Future<List<Dog>> fetchDogs({int count = 3}) async {
+  final response =
+      await http.get('https://dog.ceo/api/breeds/image/random/${count}');
+
+  if (response.statusCode == 200) {
+    print('successful API return');
+
+    final data = json.decode(response.body)['message'];
+    List<Dog> dogs = [];
+    RegExp breedExtract = RegExp(r'.*\/([^\/]+)\/'); // regex to match
+    for (var d in data) {
+      final breed = breedExtract.firstMatch(d)[1];
+      Dog currentDog = Dog(breed, d); // breed, filename
+      dogs.add(currentDog);
+    }
+
+    print('dogs: ${dogs.length}');
+
+    return dogs;
+  } else {
+    // If the server did not return a 200 OK response, then throw an exception.
+    throw Exception('Failed to load dogs');
+  }
+}
+
+class Dog {
+  final String breed;
+  final String filename;
+
+  Dog(this.breed, this.filename);
 }
