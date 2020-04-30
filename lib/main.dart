@@ -1,4 +1,5 @@
 import 'dart:convert';
+//import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -29,12 +30,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String sortOrder = 'ASC';
+  IconData sortArrow = Icons.arrow_drop_down_circle;
 
   void _incrementCounter() {
     setState(() {
-      _counter = _counter + 2;
+      _counter = _counter + 1;
       // futureDog = fetchDog();
       futureDogs = fetchDogs(count: _counter);
+      sortArrow = Icons.arrow_drop_down_circle;
     });
   }
 
@@ -53,6 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(this.sortArrow),
+              onPressed: () {
+                sortToggle(this.sortOrder);
+              })
+        ],
       ),
       body: Center(
         child: Column(
@@ -62,20 +73,29 @@ class _MyHomePageState extends State<MyHomePage> {
               future: futureDogs,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  List<Dog> dogs = snapshot.data;
+                  dogs.sort((a, b) => sortBy(a, b)); // alpha sort by breed
                   return Expanded(
                     child: ListView.builder(
-                        itemCount: snapshot.data.length,
+                        itemCount: dogs.length,
                         itemBuilder: (context, index) {
                           return Card(
                             child: ListTile(
                               leading: CircleAvatar(
                                 backgroundColor: Colors.blueAccent,
                                 backgroundImage:
-                                    NetworkImage(snapshot.data[index].filename),
+                                    NetworkImage(dogs[index].filename),
                               ),
-                              title: Text(snapshot.data[index].breed),
-                              subtitle: Text(snapshot.data[index].filename),
+                              title: Text(dogs[index].breed),
+                              subtitle: Text(dogs[index].filename),
                               trailing: Icon(Icons.edit),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DogDetailPage(dogs[index])));
+                              },
                             ),
                           );
                         }),
@@ -103,6 +123,27 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.beach_access),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  sortToggle(var currentSort) {
+    setState(() {
+      if (currentSort == 'ASC') {
+        this.sortOrder = "DESC";
+        sortArrow = Icons.arrow_upward;
+      } else {
+        this.sortOrder = "ASC";
+        sortArrow = Icons.arrow_downward;
+      }
+      print(this.sortOrder);
+    });
+  }
+
+  sortBy(a, b) {
+    if (this.sortOrder == 'ASC') {
+      return a.breed.compareTo(b.breed);
+    } else {
+      return b.breed.compareTo(a.breed);
+    }
   }
 }
 
@@ -154,7 +195,7 @@ Future<Dog> fetchDog() async {
 
 Future<List<Dog>> fetchDogs({int count = 3}) async {
   final response =
-      await http.get('https://dog.ceo/api/breeds/image/random/${count}');
+      await http.get('https://dog.ceo/api/breeds/image/random/$count');
 
   if (response.statusCode == 200) {
     print('successful API return');
@@ -177,12 +218,51 @@ Future<List<Dog>> fetchDogs({int count = 3}) async {
 }
 
 String parseBreed(breed) {
-  var breedAsWords = breed.split("-"); // API returns as either breed or breed-subbreed
+  var breedAsWords =
+      breed.split("-"); // API returns as either breed or breed-subbreed
   var rewordedBreed = '';
   for (var w in breedAsWords) {
-    rewordedBreed = '$w $rewordedBreed';
+    rewordedBreed =
+        '${w.toString()[0].toUpperCase()}${w.toString().substring(1)} $rewordedBreed'; // caps to each word
   }
   return rewordedBreed;
 }
 
+class DogDetailPage extends StatelessWidget {
+  final Dog dog;
 
+  DogDetailPage(this.dog);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(dog.breed),
+        ),
+        resizeToAvoidBottomPadding: false,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Image.network(dog.filename),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    dog.breed,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 2
+                        ..color = Colors.blue[700],
+                    ),
+                  ),
+                ),
+                Text(dog.filename),
+              ],
+            ),
+          ),
+        ));
+  }
+}
