@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:photo_view/photo_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -244,7 +245,26 @@ class DogDetailPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: <Widget>[
-                Image.network(dog.filename),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: PhotoView(
+                    // https://pub.dev/documentation/photo_view/latest/photo_view/PhotoView-class.html
+                    imageProvider: NetworkImage(dog.filename),
+                    enableRotation: true,
+                    basePosition: Alignment.center,
+                  ),
+                ),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: MediaQuery.of(context).size.width,
+                //   child: PhotoView(
+                //     // https://pub.dev/documentation/photo_view/latest/photo_view/PhotoView-class.html
+                //     imageProvider: NetworkImage(dog.filename),
+                //     enableRotation: true,
+                //     basePosition: Alignment.center,
+                //   ),
+                // ),
+                // Image.network(dog.filename),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
