@@ -70,55 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //
-            //
-
-            
-                    
-                    FutureBuilder(
-              future: futureDogs,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                    return
-                    InkWell(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          DogDetailPage(Dog('Salem', 'was here')))),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  children: <Widget>[
-
-                    Hero(
-                                tag: 'test',
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.blueAccent,
-                                  backgroundImage:
-                                      NetworkImage(snapshot.data[0].filename),
-                                ),
-                              )],
-                              ),
-                              ),
-                              );
-                    
-                    //
-                    // Hero(
-                    //   tag: 'test',
-                    //   child: CircleAvatar(
-                    //     backgroundColor: Colors.blueAccent,
-                    //     backgroundImage: NetworkImage(
-                    //         "https://images.dog.ceo/breeds/hound-afghan/n02088094_4517.jpg"),
-                    //   ),
-                    // );//,
-                    //
-                }else{return CircularProgressIndicator();}},
-                ),
-
-//
-//
-            //
             FutureBuilder(
               future: futureDogs,
               builder: (context, snapshot) {
@@ -132,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           return Card(
                             child: ListTile(
                               leading: Hero(
-                                tag: 'dogImage' + dogs[index].breed,
+                                tag: 'dogImage_'+dogs[index].breed,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.blueAccent,
                                   backgroundImage:
@@ -304,11 +255,9 @@ class DogDetailPage extends StatelessWidget {
                     // borderRadius: BorderRadius.circular(15.0),
                     child: PhotoView(
                       // https://pub.dev/documentation/photo_view/latest/photo_view/PhotoView-class.html
-                      // imageProvider: NetworkImage(dog.filename),
-                      imageProvider: NetworkImage("https://images.dog.ceo/breeds/hound-afghan/n02088094_4517.jpg"),
+                      imageProvider: NetworkImage(dog.filename),
                       heroAttributes: PhotoViewHeroAttributes(
-                        tag: 'dogImage${dog.breed}',
-                        // tag: 'test',
+                        tag: 'dogImage_${dog.breed}',
                         transitionOnUserGestures: true,
                       ),
                       // enableRotation: true,
@@ -316,18 +265,7 @@ class DogDetailPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                //
-                // Hero(
-                //   tag: 'test', //'dog_Image${dog.breed}',
-                //   child: //Image.network(dog.filename),
-                //       CircleAvatar(
-                //         radius: 150,
-                //     backgroundColor: Colors.blueAccent,
-                //     backgroundImage: NetworkImage(
-                //         "https://images.dog.ceo/breeds/hound-afghan/n02088094_4517.jpg"),
-                //   ),
-                // ),
-                //
+                // Image.network(dog.filename),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
