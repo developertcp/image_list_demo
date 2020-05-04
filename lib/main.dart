@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Dog Demo Home Page'),
+      home: MyHomePage(title: "Dog Days Finderouter App"),
     );
   }
 }
@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             Text(
-              'You have pushed the button this many times:',
+              (_counter > 10) ? 'Whoa doggie, You have added $_counter dogs to your list:' : 'You have added $_counter dogs to your list:' ,
             ),
             Text(
               '$_counter',
@@ -256,6 +256,7 @@ class DogDetailPage extends StatelessWidget {
                     child: PhotoView(
                       // https://pub.dev/documentation/photo_view/latest/photo_view/PhotoView-class.html
                       imageProvider: NetworkImage(dog.filename),
+                      minScale: PhotoViewComputedScale.contained * 1.0,
                       heroAttributes: PhotoViewHeroAttributes(
                         tag: 'dogImage_${dog.breed}',
                         transitionOnUserGestures: true,
