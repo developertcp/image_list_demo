@@ -23,7 +23,7 @@ class Routes {
           //     dog: args,
           //   )
           // );
-          return tTransition(DogDetailPage(
+          return slideTransition(DogDetailPage(
             dog: args,
           ));
         }
@@ -75,7 +75,7 @@ class Routes {
     );
   }
 
-  static spinTransition(page) {
+  static spinFadeTransition(page) {
     return PageRouteBuilder( //https://www.raywenderlich.com/4562634-flutter-navigation-getting-started
         opaque: true,
         transitionDuration: const Duration(milliseconds: 200),
