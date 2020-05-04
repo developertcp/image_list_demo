@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_list/models/dog_model.dart';
+import 'package:image_list/components/sorted_dog_list.dart';
 
 class DogListPage extends StatefulWidget {
   DogListPage({Key key, this.title}) : super(key: key);
@@ -47,31 +48,7 @@ class _DogListPageState extends State<DogListPage> {
                 if (snapshot.hasData) {
                   List<Dog> dogs = snapshot.data;
                   dogs.sort((a, b) => sortBy(a, b)); // alpha sort by breed
-                  return Expanded(
-                    child: ListView.builder(
-                        itemCount: dogs.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              leading: Hero(
-                                tag: 'dogImage_' + dogs[index].breed,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.blueAccent,
-                                  backgroundImage:
-                                      NetworkImage(dogs[index].filename),
-                                ),
-                              ),
-                              title: Text(dogs[index].breed),
-                              subtitle: Text(dogs[index].filename),
-                              trailing: Icon(Icons.edit),
-                              onTap: () {
-                                Navigator.of(context).pushNamed('DogDetailPage',
-                                    arguments: dogs[index],);
-                              },
-                            ),
-                          );
-                        }),
-                  );
+                  return SortedDogList(dogs: dogs);
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
@@ -131,3 +108,5 @@ class _DogListPageState extends State<DogListPage> {
     }
   }
 }
+
+
