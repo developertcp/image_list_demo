@@ -8,8 +8,6 @@ class DogDetailPage extends StatelessWidget {
 
   DogDetailPage({@required this.dog});
 
-  static String id =
-      'DogDetailPage'; // used for routes to prevent string mismatch, static is a class var
   @override
   Widget build(BuildContext context) {
     return Scaffold(

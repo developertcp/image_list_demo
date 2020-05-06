@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:image_list/pages/item_list_page.dart';
 import 'package:image_list/pages/dog_detail_page.dart';
 import 'package:image_list/pages/dog_list_page.dart';
 
@@ -11,6 +12,9 @@ class Routes {
     final args = settings.arguments;
 
     switch (settings.name) {
+      //
+      case 'ItemListPage':
+        return MaterialPageRoute(builder: (_) => ItemListPage());
       //
       case 'DogListPage':
         return MaterialPageRoute(builder: (_) => DogListPage());
@@ -50,7 +54,8 @@ class Routes {
   }
 
   static slideTransition(page) {
-    return PageRouteBuilder( //https://medium.com/@agungsurya/create-custom-router-transition-in-flutter-using-pageroutebuilder-73a1a9c4a171
+    return PageRouteBuilder(
+      //https://medium.com/@agungsurya/create-custom-router-transition-in-flutter-using-pageroutebuilder-73a1a9c4a171
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return page;
@@ -76,7 +81,8 @@ class Routes {
   }
 
   static spinFadeTransition(page) {
-    return PageRouteBuilder( //https://www.raywenderlich.com/4562634-flutter-navigation-getting-started
+    return PageRouteBuilder(
+        //https://www.raywenderlich.com/4562634-flutter-navigation-getting-started
         opaque: true,
         transitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (BuildContext context, _, __) {

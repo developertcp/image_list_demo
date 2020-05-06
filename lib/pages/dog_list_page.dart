@@ -6,8 +6,6 @@ class DogListPage extends StatefulWidget {
   DogListPage({Key key, this.title}) : super(key: key);
   final String title;
 
-  static String id =
-      'DogListPage'; // used for routes to prevent string mismatch, static is a class var
   @override
   _DogListPageState createState() => _DogListPageState();
 }
@@ -63,7 +61,7 @@ class _DogListPageState extends State<DogListPage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              // style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),

@@ -7,7 +7,8 @@ class ImageList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: 'DogListPage',
+      initialRoute: 'ItemListPage',
+      // initialRoute: 'DogListPage',
       onGenerateRoute: Routes.generateRoute,
     );
   }

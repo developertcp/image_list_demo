@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "493565044752",
+    "firebase_url": "https://image-manager-3eb96.firebaseio.com",
+    "project_id": "image-manager-3eb96",
+    "storage_bucket": "image-manager-3eb96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493565044752:android:afdf25f2bf0edb180a4295",
+        "android_client_info": {
+          "package_name": "org.terraclear.image_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493565044752-v1hftduiuku4irgimtca3iuqirie1af1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv6UB6hqqA4XQ-dZuPm4Z6Ukf4leA22pI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493565044752-v1hftduiuku4irgimtca3iuqirie1af1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
