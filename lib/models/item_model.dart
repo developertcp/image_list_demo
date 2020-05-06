@@ -25,8 +25,30 @@ class Item {
 
 Future<Item> fetchItem() async {
 //  final response = await apiGetItemsRandom(count: 1);
-  return Future.value(Item(
-      itemId: 'KB332', itemName: 'Keyboard 104-key', imageRef: 'keyboard.png'));
+
+var bottleUrl = await getItemUrl('Bottle20L.png');
+
+  return Future.value(
+    Item(
+      itemId: 'Bottle20L',
+      itemName: '20 Liter Bottle',
+      imageRef: bottleUrl,
+    ),
+  );
+
+  // return Future.value(Item(
+  //     itemId: 'KB332', itemName: 'Keyboard 104-key', imageRef: 'keyboard.png'));
+}
+
+Future<List<Item>> fetchItemsAll({int count = 3}) async {
+  var bottleUrl = await getItemUrl('Bottle20L.png');
+ return Future.value([
+    Item(
+      itemId: 'Bottle20L',
+      itemName: '20 Liter Bottle',
+      imageRef: bottleUrl,
+    ),
+  ]);
 }
 
 Future<List<Item>> fetchItems({int count = 3}) async {

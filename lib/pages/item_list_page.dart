@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_list/models/item_model.dart';
 
 //temp
-// import 'package:image_list/services/firebase_storage_service.dart';
+import 'package:image_list/services/firebase_storage_service.dart';
 
 class ItemListPage extends StatefulWidget {
   ItemListPage({Key key, this.title}) : super(key: key);
@@ -28,7 +28,7 @@ class _ItemListPageState extends State<ItemListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Item List App'),
+        title: Text('Item List App.'),
         backgroundColor: Colors.lightBlueAccent,
         actions: <Widget>[
           IconButton(
@@ -138,6 +138,7 @@ class _ItemListPageState extends State<ItemListPage> {
   void _refreshState() {
     print("FAB clicked");
     futureItems = fetchItems();
+    getItemsAll();
   }
 
   void sortToggle(var currentSort) {
