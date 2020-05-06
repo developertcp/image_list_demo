@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:image_list/pages/item_list_page.dart';
+import 'package:image_list/pages/item_detail_page.dart';
+
 import 'package:image_list/pages/dog_detail_page.dart';
 import 'package:image_list/pages/dog_list_page.dart';
 
+import 'package:image_list/models/item_model.dart';
 import 'package:image_list/models/dog_model.dart';
 
 class Routes {
@@ -16,6 +19,20 @@ class Routes {
       case 'ItemListPage':
         return MaterialPageRoute(builder: (_) => ItemListPage());
       //
+      case 'ItemDetailPage':
+        // Validation of correct data type
+        if (args is Item) {
+          // return MaterialPageRoute(
+          //   builder: (_) => ItemDetailPage(
+          //     dog: args,
+          //   )
+          // );
+          return slideTransition(ItemDetailPage(
+            item: args,
+          ));
+        } // If args is not of the correct type, return an error page.
+        // You can also throw an exception while in development.
+        return _errorRoute(settings);
       case 'DogListPage':
         return MaterialPageRoute(builder: (_) => DogListPage());
       //

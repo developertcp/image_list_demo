@@ -55,7 +55,7 @@ class _ItemListPageState extends State<ItemListPage> {
                           return Card(
                             child: ListTile(
                               leading: Hero(
-                                tag: 'ItemImage_' + items[index].itemId,
+                                tag: 'itemImage_' + items[index].itemId,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.blueAccent,
                                   backgroundImage:
