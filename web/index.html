@@ -18,6 +18,29 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-analytics.js"></script> -->
+<!-- <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-firestore.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-storage.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyB2ftInTnAw6UPMzQa8MVKbptAfp5TTxYs",
+    authDomain: "image-manager-3eb96.firebaseapp.com",
+    databaseURL: "https://image-manager-3eb96.firebaseio.com",
+    projectId: "image-manager-3eb96",
+    storageBucket: "image-manager-3eb96.appspot.com",
+    messagingSenderId: "493565044752",
+    appId: "1:493565044752:web:4875f6f835d708bb0a4295",
+    measurementId: "G-3S58LC25H8"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  // firebase.analytics();
+</script>
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->

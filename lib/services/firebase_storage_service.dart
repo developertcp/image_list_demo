@@ -3,7 +3,6 @@
 //     if (dart.library.html) 'web_storage.dart'
 //     if (dart.library.io) 'mobile_storage.dart';
 
-
 // //unsupported_storage.dart
 // import 'package:flutter/material.dart';
 
@@ -14,8 +13,8 @@
 //   static Future<dynamic> loadFromStorage(BuildContext context, String image) {
 //     throw ("Platform not found");
 //   }
-// }
-
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase/firebase.dart';
 
 //mobile_storage.dart
 import 'package:firebase_storage/firebase_storage.dart';
@@ -35,7 +34,30 @@ import 'package:firebase_storage/firebase_storage.dart';
 // custom code
 
 Future<String> getItemUrl(String filename) async {
-  return await FirebaseStorage.instance.ref().child(filename).getDownloadURL();
+  if (kIsWeb) {
+  //   initializeApp(
+  //       apiKey: "AIzaSyDEktNdn4CsMUxeOyVkPFBnaoAdNhcpEPc",
+  //       authDomain: "fir-recipes-b5611.firebaseapp.com",
+  //       databaseURL: "https://fir-recipes-b5611.firebaseio.com",
+  //       projectId: "fir-recipes-b5611",
+  //       storageBucket: "fir-recipes-b5611.appspot.com",
+  //       messagingSenderId: "728428768644");
+  
+  // return await storage().ref(filename).getDownloadURL();
+    var url = await storage().ref(filename).getDownloadURL();
+    return Future.value(url.toString());
+
+    // return Future.value(
+    //     "https://img.icons8.com/material-sharp/50/000000/delete-link.png");
+
+
+
+
+  } else
+    return await FirebaseStorage.instance
+        .ref()
+        .child(filename)
+        .getDownloadURL();
 }
 //
 
@@ -62,4 +84,3 @@ Future<String> getItemUrl(String filename) async {
 //     return url;
 //   }
 // }
-
