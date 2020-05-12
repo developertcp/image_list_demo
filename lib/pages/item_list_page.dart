@@ -21,14 +21,14 @@ class _ItemListPageState extends State<ItemListPage> {
   @override
   void initState() {
     super.initState();
-    futureItems = fetchItems();
+    futureItems = fetchItemsAll();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Item List App.'),
+        title: Text('Item List App'),
         backgroundColor: Colors.lightBlueAccent,
         actions: <Widget>[
           IconButton(
@@ -57,7 +57,7 @@ class _ItemListPageState extends State<ItemListPage> {
                               leading: Hero(
                                 tag: 'itemImage_' + items[index].itemId,
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.blueAccent,
+                                  backgroundColor: Colors.white,
                                   backgroundImage:
                                       NetworkImage(items[index].imageRef),
                                 ),
@@ -137,8 +137,11 @@ class _ItemListPageState extends State<ItemListPage> {
 
   void _refreshState() {
     print("FAB clicked");
-    futureItems = fetchItems();
-    getItemsAll();
+    // futureItems = fetchItems();
+    futureItems = fetchItemsAll();
+    // apiGetAllItems();
+    // getItemsAll();
+    // getItemUrl('test/009-airport.png');
   }
 
   void sortToggle(var currentSort) {

@@ -27,6 +27,7 @@ class ItemDetailPage extends StatelessWidget {
                     child: PhotoView(
                       // https://pub.dev/documentation/photo_view/latest/photo_view/PhotoView-class.html
                       imageProvider: NetworkImage(item.imageRef),
+                      backgroundDecoration: BoxDecoration(color: Colors.white),
                       minScale: PhotoViewComputedScale.contained * 1.0,
                       heroAttributes: PhotoViewHeroAttributes(
                         tag: 'itemImage_${item.itemId}',

@@ -26,7 +26,7 @@ class Item {
 Future<Item> fetchItem() async {
 //  final response = await apiGetItemsRandom(count: 1);
 
-var bottleUrl = await getItemUrl('Bottle20L.png');
+  var bottleUrl = await getItemUrl('Bottle20L.png');
 
   return Future.value(
     Item(
@@ -41,20 +41,23 @@ var bottleUrl = await getItemUrl('Bottle20L.png');
 }
 
 Future<List<Item>> fetchItemsAll({int count = 3}) async {
-  var bottleUrl = await getItemUrl('Bottle20L.png');
- return Future.value([
-    Item(
-      itemId: 'Bottle20L',
-      itemName: '20 Liter Bottle',
-      imageRef: bottleUrl,
-    ),
-  ]);
+
+return getItemsAll();
+
+  // var bottleUrl = await getItemUrl('Bottle20L.png');
+  // return Future.value([
+  //   Item(
+  //     itemId: 'Bottle20L',
+  //     itemName: '20 Liter Bottle',
+  //     imageRef: bottleUrl,
+  //   ),
+  // ]);
 }
 
 Future<List<Item>> fetchItems({int count = 3}) async {
   // return await apiGetItemsRandom(count: count);
 // List<Item> items;
-// await getItemUrl('Bottle20L.png').then((url) => 
+// await getItemUrl('Bottle20L.png').then((url) =>
 // items =  [
 //     Item(
 //       itemId: 'Bottle20L',
@@ -64,7 +67,7 @@ Future<List<Item>> fetchItems({int count = 3}) async {
 //   ]);
 // return items;
 
-var bottleUrl = await getItemUrl('Bottle20L.png');
+  var bottleUrl = await getItemUrl('Bottle20L.png');
 
   return Future.value([
     Item(

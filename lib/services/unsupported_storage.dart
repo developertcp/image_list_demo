@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_list/models/item_model.dart';
 
 class FireStorageService extends ChangeNotifier {
   FireStorageService._();
@@ -8,11 +9,20 @@ class FireStorageService extends ChangeNotifier {
   }
 }
 
+//temp
+void apiGetAllItems(){}
+
 Future<String> getItemUrl(String filename) async {
   return Future.value("unsupported platform");
 }
 
-void getItemsAll() async {
-  // return await FirebaseStorage.instance.ref().child(__).getDownloadURL();
-  print("unsupported");
+Future<List<Item>> getItemsAll() async {
+  print("unsupported platform");
+  return Future.value([
+    Item(
+      itemId: 'Unsupported',
+      itemName: 'Unsuppoerted Platform',
+      imageRef: "unsupported.png",
+    ),
+  ]);
 }
