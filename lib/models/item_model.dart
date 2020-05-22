@@ -1,6 +1,3 @@
-// import 'package:image_list/services/Item_API.dart';
-
-// import 'package:flutter/material.dart';
 import 'package:image_list/services/firebase_storage_service.dart';
 
 class Item {
@@ -11,84 +8,43 @@ class Item {
   Item({this.itemId, this.itemName, this.imageRef});
 }
 
-// Future<Widget> getImage(BuildContext context, String image) async {
-//   Image m;
-//   await FirebaseStorageService.loadFromStorage(context, image).then((downloadUrl) {
-//     m = Image.network(
-//       downloadUrl.toString(),
-//       fit: BoxFit.scaleDown,
-//     );
-//   });
-
-//   return m;
-// }
-
-Future<Item> fetchItem() async {
-//  final response = await apiGetItemsRandom(count: 1);
-
-  var bottleUrl = await getItemUrl('Bottle20L.png');
-
-  return Future.value(
-    Item(
-      itemId: 'Bottle20L',
-      itemName: '20 Liter Bottle',
-      imageRef: bottleUrl,
-    ),
-  );
-
-  // return Future.value(Item(
-  //     itemId: 'KB332', itemName: 'Keyboard 104-key', imageRef: 'keyboard.png'));
-}
-
 Future<List<Item>> fetchItemsAll({int count = 3}) async {
-
-return getItemsAll();
-
-  // var bottleUrl = await getItemUrl('Bottle20L.png');
-  // return Future.value([
-  //   Item(
-  //     itemId: 'Bottle20L',
-  //     itemName: '20 Liter Bottle',
-  //     imageRef: bottleUrl,
-  //   ),
-  // ]);
+  final allStorageItems = await FireStorageService().getStorageItemsAll(folder: '');
+  // final allStorageItems = await getStorageItemsAll(folder: 'test');
+  List<Item> allItems = [];
+  for(var item in allStorageItems) {
+    allItems.add(
+    Item(
+      itemId: item.filename,
+      itemName: item.name,
+      imageRef: item.url,
+    ));
+  }
+  return allItems;
 }
 
-Future<List<Item>> fetchItems({int count = 3}) async {
-  // return await apiGetItemsRandom(count: count);
-// List<Item> items;
-// await getItemUrl('Bottle20L.png').then((url) =>
-// items =  [
+// Future<Item> fetchItem() async {
+//   var bottleUrl = await FireStorageService.getItemUrl('Bottle20L.png');
+//   return Future.value(
 //     Item(
 //       itemId: 'Bottle20L',
 //       itemName: '20 Liter Bottle',
-//       imageRef: url,
+//       imageRef: bottleUrl,
+//     ),
+//   );
+// }
+
+// Future<List<Item>> fetchItems({int count = 3}) {
+//   return Future.value([
+//     Item(
+//       itemId: 'CP121',
+//       itemName: 'Standard Cup',
+//       imageRef: 'cup.png',
+//     ),
+//     Item(
+//       itemId: 'SCRFH1',
+//       itemName: 'Flathead Screwdriver',
+//       imageRef: 'screwdriver.png',
 //     ),
 //   ]);
-// return items;
-
-  var bottleUrl = await getItemUrl('Bottle20L.png');
-
-  return Future.value([
-    Item(
-      itemId: 'Bottle20L',
-      itemName: '20 Liter Bottle',
-      imageRef: bottleUrl,
-    ),
-  ]);
-
-//
-
-  // return Future.value([
-  //   Item(
-  //     itemId: 'CP121',
-  //     itemName: 'Standard Cup',
-  //     imageRef: 'cup.png',
-  //   ),
-  //   Item(
-  //     itemId: 'SCRFH1',
-  //     itemName: 'Flathead Screwdriver',
-  //     imageRef: 'screwdriver.png',
-  //   ),
-  // ]);
-}
+// }

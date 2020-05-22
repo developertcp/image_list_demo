@@ -28,10 +28,11 @@ dependencies:
   photo_view: ^0.9.2
   firebase_core: ^0.4.4+3
   firebase_storage: ^3.1.5
-  firebase_auth: ^0.16.0
+  # firebase_auth: ^0.16.0
 
   googleapis: any
   googleapis_auth: any
+  image_picker: ^0.6.6+4
 
   # for web support of firebase storage - may be superseded 
   firebase: ^7.3.0

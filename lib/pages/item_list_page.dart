@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_list/models/item_model.dart';
 
-//temp
-import 'package:image_list/services/firebase_storage_service.dart';
-
 class ItemListPage extends StatefulWidget {
   ItemListPage({Key key, this.title}) : super(key: key);
   final String title;
@@ -13,7 +10,6 @@ class ItemListPage extends StatefulWidget {
 }
 
 class _ItemListPageState extends State<ItemListPage> {
-  // int _counter = 0;
   String sortOrder = '';
   IconData sortArrow = Icons.arrow_drop_down_circle;
   Future<List<Item>> futureItems;
@@ -83,34 +79,6 @@ class _ItemListPageState extends State<ItemListPage> {
               },
             ),
 
-//  FutureBuilder(
-//                             // future: getItemUrl('Bottle20L.png'),
-//                             future: getImage(context, 'Bottle20L.png'),
-//                             builder: (context, snapshot) {
-//                               if (snapshot.connectionState ==
-//                                   ConnectionState.done)
-//                                 return Container(
-//                                   height:
-//                                       MediaQuery.of(context).size.height / 1.25,
-//                                   width:
-//                                       MediaQuery.of(context).size.width / 1.25,
-//                                   child: snapshot.data,
-//                                 );
-
-//                               if (snapshot.connectionState ==
-//                                   ConnectionState.waiting)
-//                                 return Container(
-//                                     height: MediaQuery.of(context).size.height /
-//                                         1.25,
-//                                     width: MediaQuery.of(context).size.width /
-//                                         1.25,
-//                                     child: CircularProgressIndicator());
-
-//                               return Container();
-//                             },
-//  ),
-
-//
           ],
         ),
       ),
@@ -122,26 +90,15 @@ class _ItemListPageState extends State<ItemListPage> {
     );
   }
 
-  // Future<Widget> _getImage(BuildContext context, String image) async {
-  //   Image m;
-  //   await FirebaseStorageService.loadFromStorage(context, image)
-  //       .then((downloadUrl) {
-  //     m = Image.network(
-  //       downloadUrl.toString(),
-  //       fit: BoxFit.scaleDown,
-  //     );
-  //   });
-
-  //   return m;
-  // }
-
   void _refreshState() {
     print("FAB clicked");
-    // futureItems = fetchItems();
+    setState(() {});
+    setState(() {
     futureItems = fetchItemsAll();
     // apiGetAllItems();
     // getItemsAll();
     // getItemUrl('test/009-airport.png');
+    });
   }
 
   void sortToggle(var currentSort) {
