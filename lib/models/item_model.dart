@@ -23,6 +23,21 @@ Future<List<Item>> fetchItemsAll({int count = 3}) async {
   return allItems;
 }
 
+Future<List<Item>> getItemsMock() async {
+  return Future.value([
+    Item(
+      itemId: 'CLK15',
+      itemName: 'Standard Clock',
+      imageRef: '/storage/emulated/0/app images/015-clock.png',
+    ),
+    Item(
+      itemId: 'TTFAN',
+      itemName: 'Non-Adjustable Fan',
+      imageRef: '/storage/emulated/0/app images/040-fan.png',
+    ),
+  ]);  
+}
+
 // Future<Item> fetchItem() async {
 //   var bottleUrl = await FireStorageService.getItemUrl('Bottle20L.png');
 //   return Future.value(

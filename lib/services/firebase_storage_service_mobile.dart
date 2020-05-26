@@ -1,12 +1,11 @@
 import 'dart:convert';
-// import 'dart:io';
+import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart' show rootBundle;
-// import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:googleapis_auth/auth_io.dart';
-// import 'package:image_picker/image_picker.dart';
 
 // class FireStorageService extends ChangeNotifier {
 class FireStorageService {
@@ -42,8 +41,8 @@ class FireStorageService {
         // items.add(d);
         // print('name: ${itemRef['name']}');
         // print(itemRef.toString());
-        if (path.extension(itemRef['name']) != '') {
-          // if has an extension
+        // if (path.extension(itemRef['name']) != '') { // if has an extension
+        if ((int.tryParse(itemRef['size']) ?? 0 ) > 0) { // if not a folder (size 0 or null or text (evaluates null))
           futures
               .add(buildItem(itemRef['name']).then((x) => storageItems.add(x)));
         }
@@ -60,7 +59,6 @@ class FireStorageService {
 
   Future<StorageItem> buildItem(itemName) async {
     // return Item(itemId: 'Bottle20L', itemName: '20 Liter Bottle', imageRef: url);
-
     final url = await getItemUrl(itemName);
     //RegEx after / before . https://stackoverflow.com/a/57186644 and https://stackoverflow.com/a/3671731
     final filenameNoExt =
@@ -79,6 +77,32 @@ class FireStorageService {
       print('Error in getDownloadURL for $filename: ${err.toString()}');
       return (err.toString());
     }
+  }
+
+  Future<CloudStorageResult> uploadImage({
+    @required File imageToUpload,
+    @required String title,
+  }) async {
+    var imageFileName =
+        title + DateTime.now().millisecondsSinceEpoch.toString();
+
+    final StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(imageFileName);
+
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
+
+    StorageTaskSnapshot storageSnapshot = await uploadTask.onComplete;
+
+    var downloadUrl = await storageSnapshot.ref.getDownloadURL();
+
+    if (uploadTask.isComplete) {
+      var url = downloadUrl.toString();
+      return CloudStorageResult(
+        imageUrl: url,
+        imageFileName: imageFileName,
+      );
+    }
+    return null;
   }
 }
 
@@ -104,9 +128,9 @@ class StorageItems {
 //   }) async {}
 // }
 
-// class CloudStorageResult {
-//   final String imageUrl;
-//   final String imageFileName;
+class CloudStorageResult {
+  final String imageUrl;
+  final String imageFileName;
 
-//   CloudStorageResult({this.imageUrl, this.imageFileName});
-// }
+  CloudStorageResult({this.imageUrl, this.imageFileName});
+}
