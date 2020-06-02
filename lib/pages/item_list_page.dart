@@ -1,6 +1,12 @@
 import 'dart:io';
 // import 'dart:io'
 // if (dart.library.html) 'dart:html'; // alternate dart:html implementation for web
+import 'dart:typed_data';
+import 'package:flutter_cache_manager/src/cache_store.dart';
+import 'package:flutter_cache_manager/src/storage/cache_object.dart';
+import 'package:file/file.dart' as f;
+import 'package:pedantic/pedantic.dart';
+import 'package:http/http.dart' as http;
 
 // import 'package:directory_picker/directory_picker.dart';
 // import 'package:file_picker/file_picker.dart';
@@ -186,37 +192,203 @@ class _ItemListPageState extends State<ItemListPage> {
                   ),
                 ),
 
+          CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkToFileImage(
+                  url: 'http://via.placeholder.com/241x250',
+                  file: File('/storage/emulated/0/app images/241x250.png'))),
+
+          Image(
+            width: 50,
+            height: 50,
+            image: NetworkToFileImage(
+                url: 'https://picsum.photos/250?image=12',
+                file: File('/storage/emulated/0/app images/12.png')),
+            loadingBuilder: (BuildContext context,
+                Widget
+                    child, // loading builder delayed until split second once image is loaded, shows in a flash
+                ImageChunkEvent loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+            },
+          ),
+
+          Image(
+            width: 50,
+            height: 50,
+            image: NetworkToFileImage(
+                url: 'http://via.placeholder.com/243x250',
+                file: File('/storage/emulated/0/app images/243x250.png')),
+            frameBuilder: (BuildContext context, Widget child, int frame,
+                bool wasSynchronouslyLoaded) {
+              // if (wasSynchronouslyLoaded) {
+              //   return child;
+              // }
+              return AnimatedOpacity(
+                child: child,
+                opacity: frame == null ? 0 : 1,
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+
+          ClipRRect(
+            borderRadius: BorderRadius.circular(25.0),
+            clipBehavior: Clip.antiAlias,
+            child: Image(
+                height: 50.0,
+                width: 50.0,
+                image: NetworkToFileImage(
+                    url: 'https://picsum.photos/250?image=7',
+                    file: File('/storage/emulated/0/app images/image7.png'))),
+          ),
+
+          // CLOSE SECOND BEST use of NetworkToFileImage (uses progress loader, file first, network second, fade-in, save/cache to folder)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50.0),
+            clipBehavior: Clip.antiAlias,
+            child: Stack(children: <Widget>[
+              Container(
+                  width: 50.0,
+                  height: 50.0,
+                  alignment: Alignment.center,
+                  // padding: EdgeInsets.all(14.0),
+                  child: CircularProgressIndicator()),
+              Image(
+                height: 50.0,
+                width: 50.0,
+                image: NetworkToFileImage(
+                    url: 'https://picsum.photos/250?image=19',
+                    file: File('/storage/emulated/0/app images/image19.png')),
+                frameBuilder: (BuildContext context, Widget child, int frame,
+                    bool wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) {
+                    return child;
+                  }
+                  return AnimatedOpacity(
+                    child: child,
+                    opacity: frame == null ? 0 : 1,
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeOut,
+                  );
+                },
+              ),
+            ]),
+          ),
+
+          // BEST use of NetworkToFileImage (uses progress loader, file first, network second, fade-in, save/cache to folder)
+          CircularNetworkToFileImage(
+              url: 'https://picsum.photos/250?image=20',
+              filepath: 'storage/emulated/0/app images/image20.png'),
+
+          Stack(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              Center(
+                child: Container(
+                  width: 50.0,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkToFileImage(
+                          url: 'https://picsum.photos/250?image=13',
+                          file: File(
+                              '/storage/emulated/0/app images/image13.png')),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          // FutureBuilder tied to http loader provides event based widget loading
+          // issues of empty gap between images and intetional sequential loading
+          Container(
+              decoration: BoxDecoration(shape: BoxShape.circle),
+              clipBehavior: Clip.hardEdge,
+              width: 50.0,
+              height: 50.0,
+              child: ImageSequence(
+                  loadingWidget: Image.asset('assets/images/001-man-13.png'),
+                  imageList: [
+                    "https://picsum.photos/250?image=13",
+                    "https://picsum.photos/250?image=22",
+                    // "https://picsum.photos/250?image=14",
+                    // "https://picsum.photos/250?image=15",
+                    // "https://picsum.photos/250?image=17",
+                    // "https://picsum.photos/250?image=20",
+                  ])),
+
+          // Stack(
+          //   children: <Widget>[
+          //     Padding(
+          //       padding: const EdgeInsets.all(2.0),
+          //       child: Center(child: CircularProgressIndicator()),
+          //     ),
+          //     Center(
+          //       child: FadeInImage.assetNetwork(
+          //         width: 50.0,
+          //         height: 50.0,
+          //         placeholder: 'assets/images/001-man-13.png',
+          //         image: 'https://picsum.photos/250?image=9',
+          //         // image: 'http://storage/emulated/0/app images/040-fan.png',
+          //       ),
+          //     ),
+          //   ],
+          // ),
+
+          // Container(
+          //   width: 50.0,
+          //   height: 50.0,
+          //   decoration: BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     image: DecorationImage(
+          //       image: NetworkToFileImage(
+          //           url: 'http://via.placeholder.com/240x250',
+          //           file: File('/storage/emulated/0/app images/240x250.png')),
+          //     ),
+          //   ),
+          // ),
+
 // Image(image: NetworkToFileImage(
 //             url: 'https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png',
 //             file: File('/storage/emulated/0/app images/flutter-logo.png'))),
-CachedNetworkImage(
-        imageUrl: "http://via.placeholder.com/250x150",
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-        cacheManager: customCacheManager,
-     ),            
-CircleAvatar(
-                    backgroundColor: Colors.white,
-                    // backgroundImage: FileImage(_selectedImage),
-                    backgroundImage: CachedNetworkImageProvider("http://via.placeholder.com/350x150")),
+// CachedNetworkImage(
+//         imageUrl: "http://via.placeholder.com/230x150",
+//         placeholder: (context, url) => CircularProgressIndicator(),
+//         errorWidget: (context, url, error) => Icon(Icons.error),
+//         cacheManager: customCacheManager,
+//      ),
+// CircleAvatar(
+//                     backgroundColor: Colors.white,
+//                     // backgroundImage: FileImage(_selectedImage),
+//                     backgroundImage: CachedNetworkImageProvider("http://via.placeholder.com/350x150")),
 
-CachedNetworkImage(
-  imageUrl: 'http://via.placeholder.com/150x150',
-  imageBuilder: (context, imageProvider) => Container(
-    width: 40.0,
-    height: 40.0,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      image: DecorationImage(
-        image: imageProvider, fit: BoxFit.cover),
-    ),
-  ),
-  placeholder: (context, url) => CircularProgressIndicator(),
-  errorWidget: (context, url, error) => Icon(Icons.error),
-),
-
-
-
+          CachedNetworkImage(
+            imageUrl: 'http://via.placeholder.com/150x150',
+            imageBuilder: (context, imageProvider) => Container(
+              width: 50.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
+            ),
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -499,8 +671,105 @@ CachedNetworkImage(
   }
 }
 
+class ImageSequence extends StatelessWidget {
+  final Widget loadingWidget;
+  final List<String> imageList;
+
+  const ImageSequence({
+    this.loadingWidget,
+    this.imageList,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // print('Loading: ${loadingWidget.toString()}');
+    return FutureBuilder(
+      // Paste your image URL inside the htt.get method as a parameter
+      future: http.get(imageList[0]),
+      builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            // return loadingWidget; // doesn't help gap between redrawing
+          case ConnectionState.active:
+            // return loadingWidget;
+          case ConnectionState.waiting:
+            return loadingWidget ??
+                Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator());
+          case ConnectionState.done:
+            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+            // when we get the data from the http call, we give the bodyBytes to Image.memory for showing the image
+            // print('resolved: ${loadingWidget.toString()}');
+            if (imageList.length > 1) {
+              // if more than one last image in the list
+              imageList.removeAt(0); // pull the current one off the front
+              return ImageSequence(
+                // and return another recursive call for the remaining images
+                loadingWidget: Image.memory(snapshot.data
+                    .bodyBytes), // loading shows the previous image Byte stream
+                imageList:
+                    imageList, // pass the shortened list on to the next iteration
+              );
+            } else {
+              // when the list is down to one image
+              return Image.memory(
+                  snapshot.data.bodyBytes); // just show the path
+            }
+        }
+        return null; // unreachable
+      },
+    );
+  }
+}
+
+class CircularNetworkToFileImage extends StatelessWidget {
+  final String url;
+  final String filepath;
+  final double width;
+  final double height;
+
+  const CircularNetworkToFileImage({
+    @required this.url,
+    @required this.filepath,
+    this.width = 50.0,
+    this.height = 50.0,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle),
+      clipBehavior: Clip.hardEdge,
+      width: width,
+      height: height,
+      // alignment: Alignment.center,
+      child: Stack(children: <Widget>[
+        Container(
+            alignment: Alignment.center, child: CircularProgressIndicator()),
+        Image(
+          image: NetworkToFileImage(url: url, file: File(filepath)),
+          frameBuilder: (BuildContext context, Widget child, int frame,
+              bool wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) return child;
+            return AnimatedOpacity(
+              child: child,
+              opacity: frame == null ? 0 : 1,
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeOut,
+            );
+          },
+        ),
+      ]),
+    );
+  }
+}
+
 class CustomCacheManager extends BaseCacheManager {
   static const key = "customCache";
+  CacheStore _store; // for putFile override
 
   static CustomCacheManager _instance;
 
@@ -511,13 +780,38 @@ class CustomCacheManager extends BaseCacheManager {
     return _instance;
   }
 
-  CustomCacheManager._() : super(key,
-      maxAgeCacheObject: Duration(days: 700),
-      maxNrOfCacheObjects: 2000);
+  CustomCacheManager._()
+      : super(key,
+            maxAgeCacheObject: Duration(days: 700), maxNrOfCacheObjects: 2000);
 
   Future<String> getFilePath() async {
     // var directory = await getTemporaryDirectory();
     var directory = await getExternalStorageDirectory();
     return path.join(directory.path, key);
+  }
+
+  @override
+  Future<File> putFile(
+    String url,
+    Uint8List fileBytes, {
+    String eTag,
+    Duration maxAge = const Duration(days: 30),
+    String fileExtension = 'file',
+  }) async {
+    var cacheObject = await _store.retrieveCacheData(url);
+    cacheObject ??= CacheObject(url, relativePath: '$eTag.$fileExtension');
+    cacheObject.validTill = DateTime.now().add(maxAge);
+    cacheObject.eTag = eTag;
+
+    Future<f.Directory> _fileDir = _store.fileDir;
+
+    final file = (await _fileDir).childFile(cacheObject.relativePath);
+    final folder = file.parent;
+    if (!(await folder.exists())) {
+      folder.createSync(recursive: true);
+    }
+    await file.writeAsBytes(fileBytes);
+    unawaited(_store.putFile(cacheObject));
+    return file;
   }
 }
