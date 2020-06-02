@@ -5,11 +5,16 @@ import 'dart:io';
 // import 'package:directory_picker/directory_picker.dart';
 // import 'package:file_picker/file_picker.dart';
 // import 'package:filesystem_picker/filesystem_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:path/path.dart' as path;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_list/models/item_model.dart';
 import 'package:image_list/services/firebase_storage_service.dart';
 import 'package:image_list/services/local_image_pick_service.dart';
+import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:path_provider_ex/path_provider_ex.dart';
 // import 'package:permission_handler/permission_handler.dart';
@@ -35,6 +40,7 @@ class _ItemListPageState extends State<ItemListPage> {
   Directory selectedDirectory;
   Directory prefPath;
   Directory rootPath;
+  CustomCacheManager customCacheManager = CustomCacheManager();
 
   @override
   void initState() {
@@ -179,6 +185,38 @@ class _ItemListPageState extends State<ItemListPage> {
                         : FileImage(File(_selectedImage.path)),
                   ),
                 ),
+
+// Image(image: NetworkToFileImage(
+//             url: 'https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png',
+//             file: File('/storage/emulated/0/app images/flutter-logo.png'))),
+CachedNetworkImage(
+        imageUrl: "http://via.placeholder.com/250x150",
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        cacheManager: customCacheManager,
+     ),            
+CircleAvatar(
+                    backgroundColor: Colors.white,
+                    // backgroundImage: FileImage(_selectedImage),
+                    backgroundImage: CachedNetworkImageProvider("http://via.placeholder.com/350x150")),
+
+CachedNetworkImage(
+  imageUrl: 'http://via.placeholder.com/150x150',
+  imageBuilder: (context, imageProvider) => Container(
+    width: 40.0,
+    height: 40.0,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      image: DecorationImage(
+        image: imageProvider, fit: BoxFit.cover),
+    ),
+  ),
+  placeholder: (context, url) => CircularProgressIndicator(),
+  errorWidget: (context, url, error) => Icon(Icons.error),
+),
+
+
+
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -458,5 +496,28 @@ class _ItemListPageState extends State<ItemListPage> {
     } else {
       return 0;
     }
+  }
+}
+
+class CustomCacheManager extends BaseCacheManager {
+  static const key = "customCache";
+
+  static CustomCacheManager _instance;
+
+  factory CustomCacheManager() {
+    if (_instance == null) {
+      _instance = new CustomCacheManager._();
+    }
+    return _instance;
+  }
+
+  CustomCacheManager._() : super(key,
+      maxAgeCacheObject: Duration(days: 700),
+      maxNrOfCacheObjects: 2000);
+
+  Future<String> getFilePath() async {
+    // var directory = await getTemporaryDirectory();
+    var directory = await getExternalStorageDirectory();
+    return path.join(directory.path, key);
   }
 }

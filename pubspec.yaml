@@ -40,7 +40,9 @@ dependencies:
   # path_provider_ex: ^1.0.1
   # permission_handler: ^3.0.0
   # file_picker: ^1.9.0+1
-  # cached_network_image: ^2.2.0+1
+  cached_network_image: ^2.2.0+1
+  network_to_file_image: ^2.3.1
+
 
   # for web support of firebase storage - may be superseded 
   firebase: ^7.3.0
