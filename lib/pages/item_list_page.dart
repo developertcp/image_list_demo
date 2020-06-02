@@ -93,16 +93,19 @@ class _ItemListPageState extends State<ItemListPage> {
                           child: ListTile(
                             leading: Hero(
                               tag: 'itemImage_' + items[index].itemId,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                backgroundImage:
-                                    HybridImage(File(items[index].imageRef)),
-                                // File(items[index].imageRef).existsSync()
-                                //     ? FileImage(
-                                //         File(items[index].imageRef))
-                                //     : AssetImage('assets/images/001-man-13.png'),
-                                // NetworkImage(items[index].imageRef),
-                              ),
+                              // child: CircleAvatar(
+                              //   backgroundColor: Colors.white,
+                              //   backgroundImage:
+                              //       HybridImage(File(items[index].imageRef)),
+                              //   // File(items[index].imageRef).existsSync()
+                              //   //     ? FileImage(
+                              //   //         File(items[index].imageRef))
+                              //   //     : AssetImage('assets/images/001-man-13.png'),
+                              //   // NetworkImage(items[index].imageRef),
+                              // ),
+                              child: CircularNetworkToFileImage(
+                                  url: items[index].imageRef,
+                                  filepath: items[index].imageRef),
                             ),
                             title: Text(items[index].itemName),
                             // subtitle: Text(items[index].imageRef),
@@ -286,8 +289,9 @@ class _ItemListPageState extends State<ItemListPage> {
 
           // BEST use of NetworkToFileImage (uses progress loader, file first, network second, fade-in, save/cache to folder)
           CircularNetworkToFileImage(
-              url: 'https://picsum.photos/250?image=20',
-              filepath: 'storage/emulated/0/app images/image20.png'),
+              url: 'https://picsum.photos/250?image=29',
+              filepath: 'storage/emulated/0/app images/image29.png',
+              placeholderWidget: Image.asset('assets/images/001-man-13.png'),),
 
           Stack(
             children: <Widget>[
@@ -684,43 +688,46 @@ class ImageSequence extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print('Loading: ${loadingWidget.toString()}');
-    return FutureBuilder(
-      // Paste your image URL inside the htt.get method as a parameter
-      future: http.get(imageList[0]),
-      builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
+    return Stack(children: [
+      loadingWidget,
+      FutureBuilder(
+        // Paste your image URL inside the htt.get method as a parameter
+        future: http.get(imageList[0]),
+        builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
             // return loadingWidget; // doesn't help gap between redrawing
-          case ConnectionState.active:
+            case ConnectionState.active:
             // return loadingWidget;
-          case ConnectionState.waiting:
-            return loadingWidget ??
-                Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator());
-          case ConnectionState.done:
-            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-            // when we get the data from the http call, we give the bodyBytes to Image.memory for showing the image
-            // print('resolved: ${loadingWidget.toString()}');
-            if (imageList.length > 1) {
-              // if more than one last image in the list
-              imageList.removeAt(0); // pull the current one off the front
-              return ImageSequence(
-                // and return another recursive call for the remaining images
-                loadingWidget: Image.memory(snapshot.data
-                    .bodyBytes), // loading shows the previous image Byte stream
-                imageList:
-                    imageList, // pass the shortened list on to the next iteration
-              );
-            } else {
-              // when the list is down to one image
-              return Image.memory(
-                  snapshot.data.bodyBytes); // just show the path
-            }
-        }
-        return null; // unreachable
-      },
-    );
+            case ConnectionState.waiting:
+              return loadingWidget ??
+                  Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator());
+            case ConnectionState.done:
+              if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+              // when we get the data from the http call, we give the bodyBytes to Image.memory for showing the image
+              // print('resolved: ${loadingWidget.toString()}');
+              if (imageList.length > 1) {
+                // if more than one last image in the list
+                imageList.removeAt(0); // pull the current one off the front
+                return ImageSequence(
+                  // and return another recursive call for the remaining images
+                  loadingWidget: Image.memory(snapshot.data
+                      .bodyBytes), // loading shows the previous image Byte stream
+                  imageList:
+                      imageList, // pass the shortened list on to the next iteration
+                );
+              } else {
+                // when the list is down to one image
+                return Image.memory(
+                    snapshot.data.bodyBytes); // just show the path
+              }
+          }
+          return null; // unreachable
+        },
+      )
+    ]);
   }
 }
 
@@ -729,12 +736,14 @@ class CircularNetworkToFileImage extends StatelessWidget {
   final String filepath;
   final double width;
   final double height;
+  final Widget placeholderWidget;
 
   const CircularNetworkToFileImage({
     @required this.url,
     @required this.filepath,
     this.width = 50.0,
     this.height = 50.0,
+    this.placeholderWidget,
     Key key,
   }) : super(key: key);
 
@@ -745,24 +754,25 @@ class CircularNetworkToFileImage extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       width: width,
       height: height,
-      // alignment: Alignment.center,
-      child: Stack(children: <Widget>[
-        Container(
-            alignment: Alignment.center, child: CircularProgressIndicator()),
-        Image(
-          image: NetworkToFileImage(url: url, file: File(filepath)),
-          frameBuilder: (BuildContext context, Widget child, int frame,
-              bool wasSynchronouslyLoaded) {
-            if (wasSynchronouslyLoaded) return child;
-            return AnimatedOpacity(
-              child: child,
-              opacity: frame == null ? 0 : 1,
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeOut,
-            );
-          },
-        ),
-      ]),
+      child: Image(
+        image: NetworkToFileImage(url: url, file: File(filepath)),
+        frameBuilder: (BuildContext context, Widget child, int frame,
+            bool wasSynchronouslyLoaded) {
+          if (wasSynchronouslyLoaded) return child;
+          // https://medium.com/flutter/improving-perceived-performance-with-image-placeholders-precaching-and-disabled-navigation-6b3601087a2b
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            child: frame != null // frame 1 is called when image is loaded
+                ? child // final widget
+                : Stack(children: [ // initial widget
+                    placeholderWidget ?? SizedBox(),
+                    Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator())
+                  ]),
+          ); 
+        },
+      ),
     );
   }
 }

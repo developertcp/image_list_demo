@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -26,7 +28,8 @@ class ItemDetailPage extends StatelessWidget {
                     // borderRadius: BorderRadius.circular(15.0),
                     child: PhotoView(
                       // https://pub.dev/documentation/photo_view/latest/photo_view/PhotoView-class.html
-                      imageProvider: NetworkImage(item.imageRef),
+                      // imageProvider: NetworkImage(item.imageRef),
+                      imageProvider: FileImage(File(item.imageRef)),
                       backgroundDecoration: BoxDecoration(color: Colors.white),
                       minScale: PhotoViewComputedScale.contained * 1.0,
                       heroAttributes: PhotoViewHeroAttributes(
