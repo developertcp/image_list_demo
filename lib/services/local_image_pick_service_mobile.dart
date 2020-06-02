@@ -1,10 +1,11 @@
 // drop the split code when https://github.com/flutter/plugins/pull/2767 image_picker supports web
 
-import 'dart:io';
+// import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class LocalImagePickService {
-  Future<File> selectImage([source]) async {
+  // Future<File> selectImage([source]) async {
+  Future<PickedFile> selectImage([source]) async {
     ImageSource imageSource =
         source == 'camera' ? ImageSource.camera : ImageSource.gallery;
     // ImageSource imageSource;
@@ -13,7 +14,10 @@ class LocalImagePickService {
     // } else if (source == 'gallery') {
     //   imageSource = ImageSource.gallery;
     // }
-    return await ImagePicker.pickImage(source: imageSource);
+    // return await ImagePicker.pickImage(source: imageSource);
+    final _picker = ImagePicker();
+    return await _picker.getImage(source: imageSource);
+    // return await ImagePicker.pickImage(source: imageSource);
   }
 
   // void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
