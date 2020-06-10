@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:image_list/pages/item_list_page.dart';
-import 'package:image_list/pages/item_detail_page.dart';
-import 'package:image_list/pages/login_page.dart';
+import 'package:image_list/screens/item_list_screen.dart';
+import 'package:image_list/screens/item_detail_screen.dart';
+import 'package:image_list/screens/login_screen.dart';
 
-import 'package:image_list/pages/dog_detail_page.dart';
-import 'package:image_list/pages/dog_list_page.dart';
+import 'package:image_list/screens/dog_detail_screen.dart';
+import 'package:image_list/screens/dog_list_screen.dart';
 
 import 'package:image_list/models/item_model.dart';
 import 'package:image_list/models/dog_model.dart';
@@ -17,38 +17,38 @@ class Routes {
 
     switch (settings.name) {
       //
-      case 'LoginPage':
-        return MaterialPageRoute(builder: (_) => LoginPage());
+      case 'LoginScreen':
+        return MaterialPageRoute(builder: (_) => LoginScreen());
       //
-      case 'ItemListPage':
-        return MaterialPageRoute(builder: (_) => ItemListPage());
+      case 'ItemListScreen':
+        return MaterialPageRoute(builder: (_) => ItemListScreen());
       //
-      case 'ItemDetailPage':
+      case 'ItemDetailScreen':
         // Validation of correct data type
         if (args is Item) {
           // return MaterialPageRoute(
-          //   builder: (_) => ItemDetailPage(
+          //   builder: (_) => ItemDetailScreen(
           //     dog: args,
           //   )
           // );
-          return slideTransition(ItemDetailPage(
+          return slideTransition(ItemDetailScreen(
             item: args,
           ));
         } // If args is not of the correct type, return an error page.
         // You can also throw an exception while in development.
         return _errorRoute(settings);
-      case 'DogListPage':
-        return MaterialPageRoute(builder: (_) => DogListPage());
+      case 'DogListScreen':
+        return MaterialPageRoute(builder: (_) => DogListScreen());
       //
-      case 'DogDetailPage':
+      case 'DogDetailScreen':
         // Validation of correct data type
         if (args is Dog) {
           // return MaterialPageRoute(
-          //   builder: (_) => DogDetailPage(
+          //   builder: (_) => DogDetailScreen(
           //     dog: args,
           //   )
           // );
-          return slideTransition(DogDetailPage(
+          return slideTransition(DogDetailScreen(
             dog: args,
           ));
         }

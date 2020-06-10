@@ -19,9 +19,9 @@ class ImageList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // initialRoute: 'ItemListPage',
-      initialRoute: 'LoginPage',
-      // initialRoute: 'DogListPage',
+      // initialRoute: 'ItemListScreen',
+      initialRoute: 'LoginScreen',
+      // initialRoute: 'DogListScreen',
       onGenerateRoute: Routes.generateRoute,
     );
   }

@@ -29,7 +29,7 @@ class SortedDogList extends StatelessWidget {
                 subtitle: Text(dogs[index].filename),
                 trailing: Icon(Icons.edit),
                 onTap: () {
-                  Navigator.of(context).pushNamed('DogDetailPage',
+                  Navigator.of(context).pushNamed('DogDetailScreen',
                       arguments: dogs[index],);
                 },
               ),

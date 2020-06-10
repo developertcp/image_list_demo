@@ -3,10 +3,10 @@ import 'package:photo_view/photo_view.dart';
 
 import 'package:image_list/models/dog_model.dart';
 
-class DogDetailPage extends StatelessWidget {
+class DogDetailScreen extends StatelessWidget {
   final Dog dog;
 
-  DogDetailPage({@required this.dog});
+  DogDetailScreen({@required this.dog});
 
   @override
   Widget build(BuildContext context) {

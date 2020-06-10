@@ -10,14 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'chat_screen.dart';
 
-class LoginPage extends StatefulWidget {
-  static String id =
-      'LoginPage'; // used for routes to prevent string mismatch, static is a class var
+class LoginScreen extends StatefulWidget {
+  // static String id =
+  //     'LoginScreen'; // used for routes to prevent string mismatch, static is a class var
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   // final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
   String email;
@@ -132,7 +132,7 @@ print('storedUserName: $storedUserName');
 
 
                 if (await Permission.storage.request().isGranted) {
-                  Navigator.of(context).pushNamed('ItemListPage');
+                  Navigator.of(context).pushNamed('ItemListScreen');
                 } else {
                   showDialog(
                       context: context,

@@ -5,10 +5,10 @@ import 'package:photo_view/photo_view.dart';
 
 import 'package:image_list/models/item_model.dart';
 
-class ItemDetailPage extends StatelessWidget {
+class ItemDetailScreen extends StatelessWidget {
   final Item item;
 
-  ItemDetailPage({@required this.item});
+  ItemDetailScreen({@required this.item});
 
   @override
   Widget build(BuildContext context) {

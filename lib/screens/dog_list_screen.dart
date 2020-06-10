@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:image_list/models/dog_model.dart';
 import 'package:image_list/components/sorted_dog_list.dart';
 
-class DogListPage extends StatefulWidget {
-  DogListPage({Key key, this.title}) : super(key: key);
+class DogListScreen extends StatefulWidget {
+  DogListScreen({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _DogListPageState createState() => _DogListPageState();
+  _DogListScreenState createState() => _DogListScreenState();
 }
 
-class _DogListPageState extends State<DogListPage> {
+class _DogListScreenState extends State<DogListScreen> {
   int _counter = 0;
   String sortOrder = '';
   IconData sortArrow = Icons.arrow_drop_down_circle;

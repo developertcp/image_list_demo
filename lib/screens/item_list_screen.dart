@@ -28,17 +28,17 @@ import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:image_list/components/hybrid_image.dart';
 
-class ItemListPage extends StatefulWidget {
-  ItemListPage({Key key, this.title}) : super(key: key);
+class ItemListScreen extends StatefulWidget {
+  ItemListScreen({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _ItemListPageState createState() => _ItemListPageState();
+  _ItemListScreenState createState() => _ItemListScreenState();
 }
 
 enum StorageRoot { internal, external }
 
-class _ItemListPageState extends State<ItemListPage> {
+class _ItemListScreenState extends State<ItemListScreen> {
   String sortOrder = '';
   IconData sortArrow = Icons.arrow_drop_down_circle;
   Future<List<Item>> futureItems;
@@ -199,7 +199,7 @@ print('storedUserName: $storedUserName');
                             ),
                             onTap: () {
                               Navigator.of(context).pushNamed(
-                                'ItemDetailPage',
+                                'ItemDetailScreen',
                                 arguments: items[index],
                               );
                             },
