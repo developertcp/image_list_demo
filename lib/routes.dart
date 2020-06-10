@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:image_list/pages/item_list_page.dart';
 import 'package:image_list/pages/item_detail_page.dart';
+import 'package:image_list/pages/login_page.dart';
 
 import 'package:image_list/pages/dog_detail_page.dart';
 import 'package:image_list/pages/dog_list_page.dart';
@@ -15,6 +16,9 @@ class Routes {
     final args = settings.arguments;
 
     switch (settings.name) {
+      //
+      case 'LoginPage':
+        return MaterialPageRoute(builder: (_) => LoginPage());
       //
       case 'ItemListPage':
         return MaterialPageRoute(builder: (_) => ItemListPage());

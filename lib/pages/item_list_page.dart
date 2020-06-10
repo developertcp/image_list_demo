@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:flutter_cache_manager/src/cache_store.dart';
 import 'package:flutter_cache_manager/src/storage/cache_object.dart';
 import 'package:file/file.dart' as f;
+import 'package:image_list/locator.dart';
+import 'package:image_list/services/temp_user_service.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,11 +50,46 @@ class _ItemListPageState extends State<ItemListPage> {
   Directory rootPath;
   CustomCacheManager customCacheManager = CustomCacheManager();
 
+  // NotesService get service => GetIt.I<NotesService>();
+// final infoService = getIt.get<NotesService>();
+// var userService = getIt<NotesService>();
+
   @override
   void initState() {
     super.initState();
+    // Permission.storage.request();
     _getItemList();
     // futureItems = fetchItemsAll();
+
+// NotesService get service => GetIt.instance<NotesService>();
+//  GetIt.instance<NotesService>();
+
+// getIt.isReady<LocalStorageService>().addListener(update));
+
+// final infoService = getIt.get<UserService>();
+var userService = getIt<UserService>();
+var storedUserName = userService.userName;
+print('storedUserName: $storedUserName');
+// var storageService = getIt<LocalStorageService>();
+userService.userName = 'single service set in second sitting';
+storedUserName = userService.userName;
+print('storedUserName: $storedUserName');
+
+
+    Image _image = Image.network(
+      'https://strattonapps.com/wp-content/uploads/2020/02/flutter-logo-5086DD11C5-seeklogo.com_.png');
+    bool _loading = true;
+    _image.image
+        .resolve(ImageConfiguration())
+        .addListener(ImageStreamListener((_, __) {
+      print('checking ImageStreamListener');
+      if (mounted) {
+        print('image mounted');
+        setState(() {
+          _loading = false;
+        });
+      }
+    }));
   }
 
   @override
@@ -287,11 +324,12 @@ class _ItemListPageState extends State<ItemListPage> {
             ]),
           ),
 
-          // BEST use of NetworkToFileImage (uses progress loader, file first, network second, fade-in, save/cache to folder)
+          // BEST use of NetworkToFileImage (uses progress loader (background placeholder/thumbnail optional), file first, network second, fade-in, save/cache to folder)
           CircularNetworkToFileImage(
-              url: 'https://picsum.photos/250?image=29',
-              filepath: 'storage/emulated/0/app images/image29.png',
-              placeholderWidget: Image.asset('assets/images/001-man-13.png'),),
+            url: 'https://picsum.photos/250?image=29',
+            filepath: 'storage/emulated/0/app images/image29.png',
+            placeholderWidget: Image.asset('assets/images/001-man-13.png'),
+          ),
 
           Stack(
             children: <Widget>[
@@ -764,13 +802,14 @@ class CircularNetworkToFileImage extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             child: frame != null // frame 1 is called when image is loaded
                 ? child // final widget
-                : Stack(children: [ // initial widget
+                : Stack(children: [
+                    // initial widget
                     placeholderWidget ?? SizedBox(),
                     Container(
                         alignment: Alignment.center,
                         child: CircularProgressIndicator())
                   ]),
-          ); 
+          );
         },
       ),
     );
