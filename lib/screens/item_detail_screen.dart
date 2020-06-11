@@ -16,7 +16,7 @@ class ItemDetailScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(item.itemName),
         ),
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Center(
             child: Column(

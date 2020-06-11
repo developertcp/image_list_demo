@@ -2,6 +2,8 @@ import 'dart:io';
 // import 'dart:io'
 // if (dart.library.html) 'dart:html'; // alternate dart:html implementation for web
 import 'dart:typed_data';
+// import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_cache_manager/src/cache_store.dart';
 import 'package:flutter_cache_manager/src/storage/cache_object.dart';
 import 'package:file/file.dart' as f;
@@ -66,18 +68,23 @@ class _ItemListScreenState extends State<ItemListScreen> {
 
 // getIt.isReady<LocalStorageService>().addListener(update));
 
+//  String _instance = '/files/image_$random.jpg';
+// StorageReference ref = FirebaseStorage.instance.ref().child(_instance);
+// ref.getDownloadURL()
+
+
 // final infoService = getIt.get<UserService>();
-var userService = getIt<UserService>();
-var storedUserName = userService.userName;
-print('storedUserName: $storedUserName');
+    var userService = getIt<UserService>();
+    var storedUserName = userService.userName;
+    print('storedUserName: $storedUserName');
 // var storageService = getIt<LocalStorageService>();
-userService.userName = 'single service set in second sitting';
-storedUserName = userService.userName;
-print('storedUserName: $storedUserName');
+    userService.userName = 'single service set in second sitting';
+    storedUserName = userService.userName;
+    print('storedUserName: $storedUserName');
 
 
     Image _image = Image.network(
-      'https://strattonapps.com/wp-content/uploads/2020/02/flutter-logo-5086DD11C5-seeklogo.com_.png');
+        'https://strattonapps.com/wp-content/uploads/2020/02/flutter-logo-5086DD11C5-seeklogo.com_.png');
     bool _loading = true;
     _image.image
         .resolve(ImageConfiguration())
@@ -155,7 +162,7 @@ print('storedUserName: $storedUserName');
                                         color: Colors.green),
                                     Icon(Icons.photo_size_select_actual,
                                         color: Colors.green),
-                                    Icon(Icons.cloud_done, color: Colors.green)
+                                    Icon(Icons.cloud_done, color: Colors.green),
                                   ]),
 //
                                   Row(
@@ -864,3 +871,40 @@ class CustomCacheManager extends BaseCacheManager {
     return file;
   }
 }
+
+//   Future<void> _downloadFile(StorageReference ref) async {
+// const String kTestString = 'Hello world!';
+
+//     final String url = await ref.getDownloadURL();
+//     // final String uuid = Uuid().v1();
+//     final String uuid = DateTime.now().millisecondsSinceEpoch.toString();
+//     final http.Response downloadData = await http.get(url);
+//     final Directory systemTempDir = Directory.systemTemp;
+//     final File tempFile = File('${systemTempDir.path}/tmp$uuid.txt');
+//     if (tempFile.existsSync()) {
+//       await tempFile.delete();
+//     }
+//     await tempFile.create();
+//     assert(await tempFile.readAsString() == "");
+//     final StorageFileDownloadTask task = ref.writeToFile(tempFile);
+//     final int byteCount = (await task.future).totalByteCount;
+//     final String tempFileContents = await tempFile.readAsString();
+//     assert(tempFileContents == kTestString);
+//     assert(byteCount == kTestString.length);
+
+//     final String fileContents = downloadData.body;
+//     final String name = await ref.getName();
+//     final String bucket = await ref.getBucket();
+//     final String path = await ref.getPath();
+//     // _scaffoldKey.currentState.showSnackBar(SnackBar(
+//     //   content: Text(
+//     //     'Success!\n Downloaded $name \n from url: $url @ bucket: $bucket\n '
+//     //     'at path: $path \n\nFile contents: "$fileContents" \n'
+//     //     'Wrote "$tempFileContents" to tmp.txt',
+//     //     style: const TextStyle(color: Color.fromARGB(255, 0, 155, 0)),
+//     //   ),
+//     // ));
+//     print('Success!\n Downloaded $name \n from url: $url @ bucket: $bucket\n '
+//         'at path: $path \n\nFile contents: "$fileContents" \n'
+//         'Wrote "$tempFileContents" to tmp.txt');
+//   }

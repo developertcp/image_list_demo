@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:image_list/screens/login_screen.dart';
+import 'package:image_list/screens/home_screen.dart';
 import 'package:image_list/screens/item_list_screen.dart';
 import 'package:image_list/screens/item_detail_screen.dart';
-import 'package:image_list/screens/login_screen.dart';
 
 import 'package:image_list/screens/dog_detail_screen.dart';
 import 'package:image_list/screens/dog_list_screen.dart';
@@ -19,6 +20,13 @@ class Routes {
       //
       case 'LoginScreen':
         return MaterialPageRoute(builder: (_) => LoginScreen());
+      //
+      case 'HomeScreen':
+        // if (args is String) {
+          return MaterialPageRoute(builder: (_) => HomeScreen(userEmail: args));
+        // } // If args is not of the correct type, return an error page.
+        // You can also throw an exception while in development.
+        // return _errorRoute(settings);
       //
       case 'ItemListScreen':
         return MaterialPageRoute(builder: (_) => ItemListScreen());

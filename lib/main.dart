@@ -21,6 +21,7 @@ class ImageList extends StatelessWidget {
     return MaterialApp(
       // initialRoute: 'ItemListScreen',
       initialRoute: 'LoginScreen',
+      // initialRoute: 'HomeScreen',
       // initialRoute: 'DogListScreen',
       onGenerateRoute: Routes.generateRoute,
     );

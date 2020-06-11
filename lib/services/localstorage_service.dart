@@ -15,4 +15,14 @@ class LocalStorageService {
 
     return _instance;
   }
+
+  void setStoredEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('storedEmail', email);
+  }
+
+  Future<String> getStoredEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('storedEmail');
+  }
 }
